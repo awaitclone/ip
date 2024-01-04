@@ -19,7 +19,6 @@ class MyBroadcasterMod(loader.Module):
         try:
             image_url = 'https://i.imgur.com/iOYNbtV.png'  # URL изображения
             message_text = (
-                "Тут текст\n\n"
                 "ЗАЕБАЛСЯ ИСКАТЬ НЕ ДОРОГОЙ НО КАЧЕСТВЕННЫЙ ДИЗАЙН ❓\n\n"
                 "Рады вам представить — MORIA DESIGN, лучший дизайн за лучшие цены во всем рынке,\n"
                 "средний чек — 250-500₽\n\n"
@@ -33,9 +32,11 @@ class MyBroadcasterMod(loader.Module):
                 "Гарант: @zelenka_guarantor_robot"
             )
             await self.client.send_file('zelenka_services', image_url, caption=message_text)
-            await self.client.send_message('kgfdgkdfgk324', self.strings("success"))
+            await self.client.send_message('gdfgdfgdf235453', self.strings("success"))
+            return True  # Успешная отправка
         except Exception as e:
-            await self.client.send_message('kgfdgkdfgk324', self.strings("error").format(str(e)))
+            await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)))
+            return False  # Ошибка при отправке
 
     @loader.command(ru_doc="Запустить рассылку сообщений")
     async def mybroadcastcmd(self, message: Message):
@@ -46,9 +47,8 @@ class MyBroadcasterMod(loader.Module):
             try:
                 current_time = time.time()
                 if current_time - last_sent_time >= interval:
-                    await self.send_message()
-                await asyncio.sleep(max(0, interval - (current_time - last_sent_time)))
+                    if await self.send_message():
+                        last_sent_time = current_time  # Обновляем время только при успешной отправке
             except Exception as e:
-                await self.client.send_message('kgfdgkdfgk324', self.strings("error").format(str(e)))
-                last_sent_time = time.time()
-                await asyncio.sleep(max(0, interval - (current_time - last_sent_time)))
+                await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)))
+            await asyncio.sleep(max(0, interval - (time.time() - last_sent_time)))
