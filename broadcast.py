@@ -40,7 +40,7 @@ class MyBroadcasterMod(loader.Module):
                 "Связь: <b>@imfckngmoriarty</b>\n"
                 "Гарант: <b>@zelenka_guarantor_robot</b>"
             )
-            await self.client.send_file('zelenka_services', image_url, caption=message_text, parse_mode='html')
+            await self.client.send_file('gdfgdfgdf235453', image_url, caption=message_text, parse_mode='html')
             await self.client.send_message('gdfgdfgdf235453', self.strings("success"), parse_mode='html')
             return True
         except FloodWaitError as e:
