@@ -1,5 +1,6 @@
 from .. import loader, utils
 from telethon.tl.types import Message
+from telethon.errors import FloodWaitError
 import asyncio
 import time
 
@@ -41,6 +42,11 @@ class MyBroadcasterMod(loader.Module):
             await self.client.send_file('zelenka_services', image_url, caption=message_text)
             await self.client.send_message('gdfgdfgdf235453', self.strings("success"))
             return True
+        except FloodWaitError as e:
+            wait_time = e.seconds  # Извлекаем время ожидания из ошибки
+            await self.client.send_message('gdfgdfgdf235453', f"{self.strings('wait_error')} {wait_time} секунд.")
+            await asyncio.sleep(wait_time)  # Ожидаем указанное количество времени
+            return False
         except Exception as e:
             await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)))
             return False
