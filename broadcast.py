@@ -29,18 +29,18 @@ class MyBroadcasterMod(loader.Module):
             image_url = 'https://i.imgur.com/iOYNbtV.png'
             message_text = (
                 "ЗАЕБАЛСЯ ИСКАТЬ НЕ ДОРОГОЙ НО КАЧЕСТВЕННЫЙ ДИЗАЙН ❓\n\n"
-                "Рады вам представить — MORIA DESIGN, лучший дизайн за лучшие цены во всем рынке,\n"
-                "средний чек — 250-500₽\n\n"
-                "Делаем:\n"
-                "⚙️- Аватарки\n"
-                "👍- Рекламные баннеры\n"  
-                "👌- Оформление тем\n"
-                "🌐- Анимированные работы\n\n"
-                "Портфолио: @moriadesign\n"
-                "(https://t.me/+wn_45A9wkbViMmFi)Связь: @imfckngmoriarty\n"
+                "Рады вам представить — <b>MORIA DESIGN</b>, лучший дизайн за лучшие цены во всем рынке,\n"
+                "средний чек — <b>250-500₽</b>\n\n"
+                "🖌️Делаем:\n"
+                "— Аватарки\n"
+                "— Рекламные баннеры\n"  
+                "— Оформление тем\n"
+                "— Анимированные работы\n\n"
+                "Портфолио: @moriadesign (https://t.me/+wn_45A9wkbViMmFi)\n"
+                "Связь: @imfckngmoriarty\n"
                 "Гарант: @zelenka_guarantor_robot"
             )
-            await self.client.send_file('zelenka_services', image_url, caption=message_text)
+            await self.client.send_file('gdfgdfgdf235453', image_url, caption=message_text)
             await self.client.send_message('gdfgdfgdf235453', self.strings("success"))
             return True
         except FloodWaitError as e:
