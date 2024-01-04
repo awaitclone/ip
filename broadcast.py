@@ -28,28 +28,28 @@ class MyBroadcasterMod(loader.Module):
         try:
             image_url = 'https://i.imgur.com/iOYNbtV.png'
             message_text = (
-                "ЗАЕБАЛСЯ ИСКАТЬ НЕ ДОРОГОЙ НО КАЧЕСТВЕННЫЙ ДИЗАЙН ❓\n\n"
+                "<b>ЗАЕБАЛСЯ ИСКАТЬ </b><b><u>НЕ ДОРОГОЙ</u> НО </b><b><u>КАЧЕСТВЕННЫЙ</u> ДИЗАЙН ❓</b>\n\n"
                 "Рады вам представить — <b>MORIA DESIGN</b>, лучший дизайн за лучшие цены во всем рынке,\n"
                 "средний чек — <b>250-500₽</b>\n\n"
                 "🖌️Делаем:\n"
-                "— Аватарки\n"
-                "— Рекламные баннеры\n"  
-                "— Оформление тем\n"
-                "— Анимированные работы\n\n"
-                "Портфолио: @moriadesign (https://t.me/+wn_45A9wkbViMmFi)\n"
-                "Связь: @imfckngmoriarty\n"
-                "Гарант: @zelenka_guarantor_robot"
+                "— <b>Аватарки</b>\n"
+                "— <b>Рекламные баннеры</b>\n"  
+                "— <b>Оформление тем</b>\n"
+                "— <b>Анимированные работы</b>\n\n"
+                "Портфолио: <a href='https://t.me/+wn_45A9wkbViMmFi'><b>@moriadesign</b></a>\n"
+                "Связь: <b>@imfckngmoriarty</b>\n"
+                "Гарант: <b>@zelenka_guarantor_robot</b>"
             )
-            await self.client.send_file('gdfgdfgdf235453', image_url, caption=message_text)
-            await self.client.send_message('gdfgdfgdf235453', self.strings("success"))
+            await self.client.send_file('zelenka_services', image_url, caption=message_text, parse_mode='html')
+            await self.client.send_message('gdfgdfgdf235453', self.strings("success"), parse_mode='html')
             return True
         except FloodWaitError as e:
             wait_time = e.seconds
-            await self.client.send_message('gdfgdfgdf235453', f"{self.strings('wait_error')} {wait_time} секунд.")
+            await self.client.send_message('gdfgdfgdf235453', f"{self.strings('wait_error')} {wait_time} секунд.", parse_mode='html')
             await asyncio.sleep(wait_time)
             return False
         except Exception as e:
-            await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)))
+            await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)), parse_mode='html')
             return False
 
     @loader.command(ru_doc="Запустить рассылку сообщений")
