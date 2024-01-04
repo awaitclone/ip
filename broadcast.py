@@ -1,8 +1,8 @@
 from .. import loader, utils
 from telethon.tl.types import Message
-from telethon.errors import FloodWaitError
 import asyncio
 import time
+from telethon.errors import FloodWaitError
 
 @loader.tds
 class MyBroadcasterMod(loader.Module):
@@ -12,7 +12,8 @@ class MyBroadcasterMod(loader.Module):
         "success": "<b>Сообщение отправлено успешно!</b>",
         "error": "<b>Ошибка при отправке сообщения:</b> {}",
         "broadcast_on": "<b>Рассылка включена.</b>",
-        "broadcast_off": "<b>Рассылка выключена.</b>"
+        "broadcast_off": "<b>Рассылка выключена.</b>",
+        "wait_error": "<b>Ожидание отправки следующего сообщения...</b>"
     }
 
     def __init__(self):
@@ -43,9 +44,9 @@ class MyBroadcasterMod(loader.Module):
             await self.client.send_message('gdfgdfgdf235453', self.strings("success"))
             return True
         except FloodWaitError as e:
-            wait_time = e.seconds  # Извлекаем время ожидания из ошибки
+            wait_time = e.seconds
             await self.client.send_message('gdfgdfgdf235453', f"{self.strings('wait_error')} {wait_time} секунд.")
-            await asyncio.sleep(wait_time)  # Ожидаем указанное количество времени
+            await asyncio.sleep(wait_time)
             return False
         except Exception as e:
             await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)))
@@ -60,8 +61,8 @@ class MyBroadcasterMod(loader.Module):
         while self.broadcast_enabled:
             current_time = time.time()
             if current_time - last_sent_time >= interval:
-                if await self.send_message():
-                    last_sent_time = current_time
+                await self.send_message()
+            last_sent_time = current_time  # Обновляем время после каждой попытки отправки
             await asyncio.sleep(max(0, interval - (time.time() - last_sent_time)))
 
     @loader.command(ru_doc="Остановить рассылку сообщений")
