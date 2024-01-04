@@ -41,9 +41,11 @@ class MyBroadcasterMod(loader.Module):
                 "Гарант: <b>@zelenka_guarantor_robot</b>"
             )
             await self.client.send_file('zelenka_services', image_url, caption=message_text, parse_mode='html')
+            # Сообщение об успешной отправке отправляется в канал логирования
             await self.client.send_message('gdfgdfgdf235453', "<b>Сообщение отправлено в zelenka_services успешно!</b>", parse_mode='html')
             return True
         except Exception as e:
+            # Логи ошибок отправляются в канал логирования
             await self.client.send_message('gdfgdfgdf235453', f"<b>Ошибка при отправке в zelenka_services:</b> {str(e)}", parse_mode='html')
             return False
 
