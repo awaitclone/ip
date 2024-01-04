@@ -41,15 +41,10 @@ class MyBroadcasterMod(loader.Module):
                 "Гарант: <b>@zelenka_guarantor_robot</b>"
             )
             await self.client.send_file('zelenka_services', image_url, caption=message_text, parse_mode='html')
-            await self.client.send_message('gdfgdfgdf235453', self.strings("success"), parse_mode='html')
+            await self.client.send_message('gdfgdfgdf235453', "<b>Сообщение отправлено в zelenka_services успешно!</b>", parse_mode='html')
             return True
-        except FloodWaitError as e:
-            wait_time = e.seconds
-            await self.client.send_message('gdfgdfgdf235453', f"{self.strings('wait_error')} {wait_time} секунд.", parse_mode='html')
-            await asyncio.sleep(wait_time)
-            return False
         except Exception as e:
-            await self.client.send_message('gdfgdfgdf235453', self.strings("error").format(str(e)), parse_mode='html')
+            await self.client.send_message('gdfgdfgdf235453', f"<b>Ошибка при отправке в zelenka_services:</b> {str(e)}", parse_mode='html')
             return False
 
     @loader.command(ru_doc="Запустить рассылку сообщений")
