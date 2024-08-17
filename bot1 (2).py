@@ -1,26 +1,23 @@
 import logging
-
 import requests
 from telethon.tl.types import Message, MessageEntityUrl
-
 from .. import loader, utils
 
 logger = logging.getLogger(__name__)
 
-
-@loader.tdsclassAutoShortenerMod(loader.Module):
+@loader.Module
+class AutoShortenerMod(loader.Module):
     """Automatically shortens URLs in your messages, which are larger than the specified threshold"""
-
 
     strings = {
         "name": "AutoShortener",
-        "state": "🔗 <b>Auotmatic url shortener is now {}</b>",
+        "state": "🔗 <b>Automatic URL shortener is now {}</b>",
         "no_args": "🔗 <b>No link to shorten</b>",
         "on": "on",
         "off": "off",
     }
 
-    def__init__(self):
+    def __init__(self):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "threshold",
@@ -30,35 +27,37 @@ logger = logging.getLogger(__name__)
             ),
             loader.ConfigValue(
                 "auto_engine",
-                "bot1",  # Changed the default engine to "bot1"lambda: "Engine to auto-shorten URLs with",
+                "bot1",  # Default engine for shortening URLs
+                lambda: "Engine to auto-shorten URLs with",
                 validator=loader.validators.Choice(["bot1"]),
             ),
         )
 
-    asyncdefautosurlcmd(self, message: Message):
+    async def autosurlcmd(self, message: Message):
         """Toggle automatic URL shortener"""
         state = not self.get("state", False)
         self.set("state", state)
         await utils.answer(
-            message, self.strings("state").format("on"if state else"off")
+            message, self.strings("state").format("on" if state else "off")
         )
 
-    asyncdefsurlcmd(self, message: Message):
-        """[url] - Shorten URL"""if (
-            notgetattr(message, "raw_text", False)
-            ornotgetattr(message, "entities", False)
-            ornot message.entities
-            ornotany(
+    async def surlcmd(self, message: Message):
+        """[url] - Shorten URL"""
+        if (
+            not getattr(message, "raw_text", False)
+            or not getattr(message, "entities", False)
+            or not message.entities
+            or not any(
                 isinstance(entity, MessageEntityUrl) for entity in message.entities
             )
         ):
             reply = await message.get_reply_message()
             if (
                 not reply
-                ornotgetattr(reply, "raw_text", False)
-                ornotgetattr(reply, "entities", False)
-                ornot reply.entities
-                ornotany(
+                or not getattr(reply, "raw_text", False)
+                or not getattr(reply, "entities", False)
+                or not reply.entities
+                or not any(
                     isinstance(entity, MessageEntityUrl) for entity in reply.entities
                 )
             ):
@@ -68,7 +67,8 @@ logger = logging.getLogger(__name__)
             txt = reply.raw_text
             text = reply.text
             entities = reply.entities
-            just_url = Falseelse:
+            just_url = False
+        else:
             txt = message.raw_text
             text = message.text
             entities = message.entities
@@ -79,14 +79,17 @@ logger = logging.getLogger(__name__)
         ]
 
         if just_url:
-            text = ""for url in urls:
+            text = ""
+        for url in urls:
             surl = await self.shorten(url)
-            ifnot just_url:
+            if not just_url:
                 text = text.replace(url, surl)
             else:
-                text += f"{surl} | "await utils.answer(message, text.strip(" | "))
+                text += f"{surl} | "
+        await utils.answer(message, text.strip(" | "))
 
-    @staticmethodasyncdefshorten(url) -> str:
+    @staticmethod
+    async def shorten(url) -> str:
         r = await utils.run_sync(
             requests.post,
             "https://bot1.org/api",  # Use your API endpoint
@@ -95,16 +98,18 @@ logger = logging.getLogger(__name__)
         )
 
         response_data = r.json()
-        return response_data.get("url", url)  # Return the shortened URL or the original if something goes wrongasyncdefwatcher(self, message: Message):
+        return response_data.get("url", url)  # Return the shortened URL or the original if something goes wrong
+
+    async def watcher(self, message: Message):
         if (
-            notgetattr(message, "text", False)
-            ornotgetattr(message, "out", False)
-            ornotgetattr(message, "entities", False)
-            ornot message.entities
-            ornotany(
+            not getattr(message, "text", False)
+            or not getattr(message, "out", False)
+            or not getattr(message, "entities", False)
+            or not message.entities
+            or not any(
                 isinstance(entity, MessageEntityUrl) for entity in message.entities
             )
-            ornot self.get("state", False)
+            or not self.get("state", False)
             or message.raw_text.lower().startswith(self.get_prefix())
         ):
             return
@@ -120,7 +125,7 @@ logger = logging.getLogger(__name__)
             )
         )
 
-        ifnot urls:
+        if not urls:
             return
 
         text = message.text
